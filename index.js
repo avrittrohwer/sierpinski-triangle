@@ -1,7 +1,7 @@
 'use strict'
 
 const canvas = document.getElementById('canvas')
-const width = window.innerWidth - 200
+const width = window.innerWidth * 0.9
 const height = (width / 2) * Math.sqrt(3)
 canvas.width = width
 canvas.height = height
@@ -76,7 +76,8 @@ const serp = (i, limit, x, y, animateEh) => {
 const form = document.getElementById('settings')
 form.addEventListener('submit', e => {
     e.preventDefault()
-
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    
     const points = document.getElementById('points').value
     const animateEh = document.getElementById('animateEh').checked
     let x = Math.floor(Math.random() * width)
