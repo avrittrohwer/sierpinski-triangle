@@ -1,48 +1,86 @@
 'use strict'
 
-const canvas = document.getElementById("canvas")
-const width = canvas.width
-const height = canvas.height
+const canvas = document.getElementById('canvas')
+const width = window.innerWidth - 200
+const height = (width / 2) * Math.sqrt(3)
+canvas.width = width
+canvas.height = height
 const ctx = canvas.getContext('2d')
 
-const drawPoint = (x, y) => ctx.fillRect(x, y, 1, 1)
-
+// vertices
 const ax = width / 2
 const ay = 0
 const bx = 0
 const by = height - 1
 const cx = width - 1
 const cy= height - 1
-var _x = Math.floor(Math.random() * width)
-var _y = Math.floor(Math.random() * height)
 
-drawPoint(ax, ay)
-drawPoint(bx, by)
-drawPoint(cx, cy)
+// paint the vertices
+ctx.fillRect(ax, ay, 1, 1)
+ctx.fillRect(bx, by, 1, 1)
+ctx.fillRect(cx, cy, 1, 1)
 
-var i = 0
-const serp = () => {
-    if (i < 100000) {
+// recursive function that uses setTimeout to animate each draw
+const serp = (i, limit, x, y, animateEh) => {
+    if (i < limit) {
         switch (Math.floor(Math.random() * 3)) {
         case 0:
             // go towards point a
-            _x = (_x + ax) / 2
-            _y = (_y + ay) / 2
+            x = (x + ax) / 2
+            y = (y + ay) / 2
             break
         case 1:
             // go towards point b
-            _x = (_x + bx) / 2
-            _y = (_y + by) / 2
+            x = (x + bx) / 2
+            y = (y + by) / 2
             break
         case 2:
             // go towards point c
-            _x = (_x + cx) / 2
-            _y = (_y + cy) / 2
+            x = (x + cx) / 2
+            y = (y + cy) / 2
             break
         }
-        drawPoint(_x, _y)
+        ctx.fillRect(x, y, 1, 1)
         i++
-        setTimeout(serp, .1)
+
+        if (animateEh) {
+            setTimeout(serp, 1, i, limit, x, y, animateEh)
+        } else {
+            // super ugly way of not exceeding the max call stack size but I'll just
+            // leave this hack in for now
+            while (i < limit) {
+                switch (Math.floor(Math.random() * 3)) {
+                case 0:
+                    // go towards point a
+                    x = (x + ax) / 2
+                    y = (y + ay) / 2
+                    break
+                case 1:
+                    // go towards point b
+                    x = (x + bx) / 2
+                    y = (y + by) / 2
+                    break
+                case 2:
+                    // go towards point c
+                    x = (x + cx) / 2
+                    y = (y + cy) / 2
+                    break
+                }
+                ctx.fillRect(x, y, 1, 1)
+                i++
+            }
+        }
     }
 }
-serp()
+
+const form = document.getElementById('settings')
+form.addEventListener('submit', e => {
+    e.preventDefault()
+
+    const points = document.getElementById('points').value
+    const animateEh = document.getElementById('animateEh').checked
+    let x = Math.floor(Math.random() * width)
+    let y = Math.floor(Math.random() * height)
+
+    serp(0, points, x, y, animateEh)
+}, false)
