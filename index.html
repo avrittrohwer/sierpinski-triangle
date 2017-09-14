@@ -51,21 +51,10 @@
 
         while (true) {
             // pick a vertex at random, go halfway towards it
-            switch (Math.floor(Math.random() * 3)) {
-            case 0: 
-                point.x = (point.x + a.x) / 2
-                point.y = (point.y + a.y) / 2
-                break
-            case 1: 
-                point.x = (point.x + b.x) / 2
-                point.y = (point.y + b.y) / 2
-                break
-            case 2: 
-                point.x = (point.x + c.x) / 2
-                point.y = (point.y + c.y) / 2
-                break
-            }
-
+            let vertex = [a, b, c][Math.floor(Math.random() * 3)]
+            point.x = (point.x + vertex.x) / 2
+            point.y = (point.y + vertex.y) / 2
+            
             yield point
         }
     }
@@ -100,9 +89,9 @@
 
     // register buttons
     document.querySelector('#go').addEventListener('click', () => {
-        if (animating) 
+        if (animating)
             return
-        
+
         if (goFastEh) {
             for (let i = 0; i < 20; i++) { // spawn 20 draw functions that keep calling themselves
                 animationRequests.push(requestAnimationFrame(draw))
