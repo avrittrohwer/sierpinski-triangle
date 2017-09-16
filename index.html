@@ -49,9 +49,10 @@
         let point = {x: Math.random(), y: Math.random() * rootThreeOver2}
         yield point
 
+        const vertices = [a, b, c]
         while (true) {
             // pick a vertex at random, go halfway towards it
-            let vertex = [a, b, c][Math.floor(Math.random() * 3)]
+            let vertex = vertices[Math.floor(Math.random() * 3)]
             point.x = (point.x + vertex.x) / 2
             point.y = (point.y + vertex.y) / 2
             
